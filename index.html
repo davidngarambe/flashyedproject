@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FlashyEd — Welcome</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .auth-shell {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg);
+    position: relative;
+    overflow: hidden;
+    padding: 24px;
+  }
+  .auth-shell::before {
+    content: '';
+    position: fixed;
+    top: -200px; left: -200px;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(240,224,64,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .auth-shell::after {
+    content: '';
+    position: fixed;
+    bottom: -200px; right: -200px;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(61,232,200,0.05) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .auth-box {
+    background: var(--surf);
+    border: 1px solid var(--border);
+    border-radius: var(--r-xl);
+    width: 100%;
+    max-width: 460px;
+    padding: 40px;
+    position: relative;
+    z-index: 1;
+    animation: slideUp .35s ease;
+  }
+  @keyframes slideUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+  .auth-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 32px;
+    justify-content: center;
+  }
+  .auth-logo-mark {
+    width: 38px; height: 38px;
+    background: var(--yellow);
+    border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .auth-logo-text {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.4rem;
+    letter-spacing: -0.03em;
+  }
+  .auth-logo-text em { font-style: normal; color: var(--yellow); }
+  .auth-tagline {
+    text-align: center;
+    color: var(--muted2);
+    font-size: 0.88rem;
+    margin-bottom: 32px;
+    margin-top: -16px;
+  }
+  .auth-tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--surf2);
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    padding: 4px;
+    margin-bottom: 28px;
+  }
+  .auth-tab {
+    flex: 1;
+    padding: 8px;
+    border: none;
+    background: none;
+    border-radius: 6px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--muted2);
+    cursor: pointer;
+    transition: all .18s;
+  }
+  .auth-tab.active {
+    background: var(--surf3);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .auth-form { display: flex; flex-direction: column; gap: 16px; }
+  .auth-form-group { display: flex; flex-direction: column; gap: 6px; }
+  .auth-footer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+  .auth-footer a { color: var(--yellow); text-decoration: underline; cursor: pointer; }
+  .auth-error {
+    background: rgba(255,107,107,.07);
+    border: 1px solid rgba(255,107,107,.2);
+    border-radius: var(--r-sm);
+    padding: 10px 14px;
+    font-size: 0.84rem;
+    color: var(--coral);
+    display: none;
+  }
+  .auth-error.show { display: block; }
+  .auth-success {
+    background: rgba(61,232,154,.07);
+    border: 1px solid rgba(61,232,154,.2);
+    border-radius: var(--r-sm);
+    padding: 10px 14px;
+    font-size: 0.84rem;
+    color: var(--easy);
+    display: none;
+  }
+  .auth-success.show { display: block; }
+  .features-row {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+  }
+  .feat-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.78rem;
+    color: var(--muted2);
+  }
+  .feat-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--yellow);
+    flex-shrink: 0;
+  }
+  .toggle-wrap {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  .toggle-wrap input[type="checkbox"] {
+    appearance: none;
+    width: 38px; height: 20px;
+    background: var(--surf3);
+    border: 1px solid var(--border2);
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all .2s;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .toggle-wrap input[type="checkbox"]::before {
+    content: '';
+    position: absolute;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--muted2);
+    top: 2px; left: 2px;
+    transition: all .2s;
+  }
+  .toggle-wrap input[type="checkbox"]:checked {
+    background: rgba(240,224,64,.2);
+    border-color: var(--yellow);
+  }
+  .toggle-wrap input[type="checkbox"]:checked::before {
+    background: var(--yellow);
+    transform: translateX(18px);
+  }
+</style>
+</head>
+<body>
+<div class="auth-shell">
+  <div class="auth-box">
+    <div class="auth-logo">
+      <div class="auth-logo-mark">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0b0b0e" stroke-width="2.5">
+          <rect x="2" y="3" width="20" height="14" rx="3"/>
+          <path d="M8 21h8M12 17v4"/>
+        </svg>
+      </div>
+      <span class="auth-logo-text">Flashy<em>Ed</em></span>
+    </div>
+    <p class="auth-tagline">AI-powered flashcards & quizzes from your lecture notes</p>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-login" onclick="switchTab('login')">Sign In</button>
+      <button class="auth-tab" id="tab-register" onclick="switchTab('register')">Sign Up</button>
+    </div>
+
+    <!-- LOGIN FORM -->
+    <div id="form-login">
+      <form class="auth-form" onsubmit="handleLogin(event)">
+        <div class="auth-form-group">
+          <label class="form-label">Email</label>
+          <input class="form-input" type="email" id="login-email" placeholder="your@email.com" required>
+        </div>
+        <div class="auth-form-group">
+          <label class="form-label">Password</label>
+          <input class="form-input" type="password" id="login-password" placeholder="Enter your password" required>
+        </div>
+        <div id="login-error" class="auth-error"></div>
+        <button class="btn btn-primary btn-full btn-lg" type="submit" id="login-btn">
+          <span class="btn-label">Sign In →</span>
+          <div class="spin-wrap"><div class="spinner"></div><span>Signing in…</span></div>
+        </button>
+      </form>
+      <p class="auth-footer">Don't have an account? <a onclick="switchTab('register')">Create one free</a></p>
+    </div>
+
+    <!-- REGISTER FORM -->
+    <div id="form-register" style="display:none">
+      <form class="auth-form" onsubmit="handleRegister(event)">
+        <div class="auth-form-group">
+          <label class="form-label">Full Name</label>
+          <input class="form-input" type="text" id="reg-name" placeholder="Jane Smith" required>
+        </div>
+        <div class="auth-form-group">
+          <label class="form-label">Email</label>
+          <input class="form-input" type="email" id="reg-email" placeholder="your@email.com" required>
+        </div>
+        <div class="auth-form-group">
+          <label class="form-label">Password</label>
+          <input class="form-input" type="password" id="reg-password" placeholder="Min 6 characters" minlength="6" required>
+        </div>
+        <div id="reg-error" class="auth-error"></div>
+        <div id="reg-success" class="auth-success"></div>
+        <button class="btn btn-primary btn-full btn-lg" type="submit" id="reg-btn">
+          <span class="btn-label">Create Account →</span>
+          <div class="spin-wrap"><div class="spinner"></div><span>Creating account…</span></div>
+        </button>
+      </form>
+      <p class="auth-footer">Already have an account? <a onclick="switchTab('login')">Sign in</a></p>
+    </div>
+
+    <div class="features-row">
+      <div class="feat-item"><div class="feat-dot"></div>AI Flashcards</div>
+      <div class="feat-item"><div class="feat-dot" style="background:var(--teal)"></div>Auto Quizzes</div>
+      <div class="feat-item"><div class="feat-dot" style="background:var(--easy)"></div>Progress Tracking</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = '/api';
+
+function switchTab(tab) {
+  const isLogin = tab === 'login';
+  document.getElementById('tab-login').classList.toggle('active', isLogin);
+  document.getElementById('tab-register').classList.toggle('active', !isLogin);
+  document.getElementById('form-login').style.display = isLogin ? 'block' : 'none';
+  document.getElementById('form-register').style.display = isLogin ? 'none' : 'block';
+}
+
+async function handleLogin(e) {
+  e.preventDefault();
+  const btn = document.getElementById('login-btn');
+  const err = document.getElementById('login-error');
+  err.classList.remove('show');
+  btn.disabled = true; btn.classList.add('loading');
+
+  try {
+    const res = await fetch(API + '/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: document.getElementById('login-email').value.trim(),
+        password: document.getElementById('login-password').value,
+      })
+    });
+    const data = await res.json();
+    if (!res.ok) { err.textContent = data.error || 'Login failed.'; err.classList.add('show'); return; }
+    localStorage.setItem('fe_user', JSON.stringify(data));
+    if (data.role === 'admin') {
+      window.location.href = 'admin.html';
+    } else {
+      window.location.href = 'app.html';
+    }
+  } catch {
+    err.textContent = 'Network error. Please try again.';
+    err.classList.add('show');
+  } finally {
+    btn.disabled = false; btn.classList.remove('loading');
+  }
+}
+
+async function handleRegister(e) {
+  e.preventDefault();
+  const btn = document.getElementById('reg-btn');
+  const err = document.getElementById('reg-error');
+  const suc = document.getElementById('reg-success');
+  err.classList.remove('show'); suc.classList.remove('show');
+  btn.disabled = true; btn.classList.add('loading');
+
+  try {
+    const res = await fetch(API + '/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: document.getElementById('reg-name').value.trim(),
+        email: document.getElementById('reg-email').value.trim(),
+        password: document.getElementById('reg-password').value,
+      })
+    });
+    const data = await res.json();
+    if (!res.ok) { err.textContent = data.error || 'Registration failed.'; err.classList.add('show'); return; }
+    suc.textContent = 'Account created! Signing you in…'; suc.classList.add('show');
+    localStorage.setItem('fe_user', JSON.stringify(data));
+    setTimeout(() => window.location.href = 'app.html', 800);
+  } catch {
+    err.textContent = 'Network error. Please try again.';
+    err.classList.add('show');
+  } finally {
+    btn.disabled = false; btn.classList.remove('loading');
+  }
+}
+
+// Redirect if already logged in
+const existingUser = localStorage.getItem('fe_user');
+if (existingUser) {
+  try {
+    const u = JSON.parse(existingUser);
+    if (u && u.id) {
+      window.location.href = u.role === 'admin' ? 'admin.html' : 'app.html';
+    }
+  } catch {}
+}
+</script>
+</body>
+</html>

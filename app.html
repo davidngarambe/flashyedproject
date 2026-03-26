@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FlashyEd — Study Intelligence Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="shell">
+
+  <!-- ══ TOPBAR ══ -->
+  <header class="topbar">
+    <a class="logo" href="#">
+      <div class="logo-mark">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <rect x="2" y="3" width="20" height="14" rx="3"/>
+          <path d="M8 21h8M12 17v4"/>
+        </svg>
+      </div>
+      <span class="logo-text">Flashy<em>Ed</em></span>
+    </a>
+    <span class="version-chip">v2.0 · Full Platform</span>
+    <div class="topbar-right">
+      <div style="display:flex;align-items:center;gap:8px;background:var(--surf2);border:1px solid var(--border);border-radius:20px;padding:5px 12px 5px 8px;font-size:0.8rem;color:var(--muted2)">
+        <div style="width:24px;height:24px;border-radius:50%;background:var(--yellow);color:#0b0b0e;font-size:0.72rem;font-weight:800;font-family:'Syne',sans-serif;display:flex;align-items:center;justify-content:center" id="user-avatar">U</div>
+        <span id="user-name-display">Student</span>
+        <button onclick="logout()" style="background:none;border:none;color:var(--muted);cursor:pointer;padding:2px 4px;border-radius:4px;font-size:0.78rem;transition:color .15s" title="Sign out">✕</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ══ SIDEBAR ══ -->
+  <nav class="sidebar">
+    <span class="nav-section-label">Study</span>
+    <button class="nav-item active" data-page="dashboard">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </button>
+    <button class="nav-item" data-page="generate">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+      Generate
+    </button>
+
+    <span class="nav-section-label">Library</span>
+    <button class="nav-item" data-page="flashcards">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="M8 10h8M8 14h5"/></svg>
+      Flashcards
+      <span class="nav-badge" id="nb-flashcards">0</span>
+    </button>
+    <button class="nav-item" data-page="quizzes">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/></svg>
+      Quizzes
+      <span class="nav-badge" id="nb-quizzes">0</span>
+    </button>
+
+    <span class="nav-section-label">Progress</span>
+    <button class="nav-item" data-page="history">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      History
+      <span class="nav-badge" id="nb-history">0</span>
+    </button>
+  </nav>
+
+  <!-- ══ MAIN ══ -->
+  <main class="main">
+
+    <!-- ─────────────── DASHBOARD ─────────────── -->
+    <section class="page active" id="page-dashboard">
+      <div style="margin-bottom:28px">
+        <h1 class="page-title">Dashboard</h1>
+        <p class="page-sub">Your learning overview at a glance.</p>
+      </div>
+
+      <!-- Stats row -->
+      <div class="grid-4" style="margin-bottom:24px">
+        <div class="stat-card" style="--accent-clr:var(--yellow)">
+          <div class="stat-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--yellow)" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="3"/></svg></div>
+          <div class="stat-label">Flashcard Sets</div>
+          <div class="stat-value" id="stat-sets">0</div>
+          <div class="stat-sub">Total generated</div>
+        </div>
+        <div class="stat-card" style="--accent-clr:var(--teal)">
+          <div class="stat-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg></div>
+          <div class="stat-label">Quizzes Taken</div>
+          <div class="stat-value" id="stat-quizzes-taken">0</div>
+          <div class="stat-sub">Across all subjects</div>
+        </div>
+        <div class="stat-card" style="--accent-clr:var(--easy)">
+          <div class="stat-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--easy)" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+          <div class="stat-label">Avg. Score</div>
+          <div class="stat-value" id="stat-avg-score">—</div>
+          <div class="stat-sub">Quiz average</div>
+        </div>
+        <div class="stat-card" style="--accent-clr:var(--medium)">
+          <div class="stat-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--medium)" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+          <div class="stat-label">Best Grade</div>
+          <div class="stat-value" id="stat-best-grade">—</div>
+          <div class="stat-sub">All time high</div>
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-bottom:24px">
+        <!-- Score trend chart -->
+        <div class="card">
+          <div class="section-hdr"><h2>Score Trend</h2><span class="pill pill-muted" id="trend-label">Last 7 attempts</span></div>
+          <div class="bar-chart" id="trend-chart">
+            <div class="empty-state" style="padding:10px;width:100%;font-size:.8rem">No quiz attempts yet.</div>
+          </div>
+        </div>
+        <!-- Difficulty breakdown -->
+        <div class="card">
+          <div class="section-hdr"><h2>Difficulty Split</h2></div>
+          <div id="diff-rings" style="display:flex;gap:20px;flex-wrap:wrap;align-items:center;justify-content:center;padding:8px 0">
+            <div class="empty-state" style="padding:10px;font-size:.8rem">Generate some flashcards first.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent activity -->
+      <div class="card">
+        <div class="section-hdr">
+          <h2>Recent Activity</h2>
+          <button class="btn btn-ghost" style="font-size:.8rem;padding:6px 12px" onclick="nav('history')">View all →</button>
+        </div>
+        <div id="dash-recent">
+          <div class="empty-state" style="padding:20px">
+            <p>No activity yet. Generate flashcards or take a quiz to get started!</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────────── GENERATE ─────────────── -->
+    <section class="page" id="page-generate">
+      <h1 class="page-title">Generate Study Materials</h1>
+      <p class="page-sub">Upload a PDF or paste notes to create flashcards and quizzes.</p>
+
+      <!-- Source input -->
+      <div class="card" style="margin-bottom:20px">
+        <h2 style="font-size:1rem;font-weight:700;margin-bottom:16px">📄 Source Material</h2>
+
+        <div class="upload-zone" id="uploadZone">
+          <input type="file" id="fileInput" accept=".pdf" style="display:none">
+          <div class="upload-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f0e040" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="12" y1="18" x2="12" y2="12"/>
+              <line x1="9" y1="15" x2="15" y2="15"/>
+            </svg>
+          </div>
+          <h3>Drop your PDF here</h3>
+          <p>Drag &amp; drop, or <strong id="browseBtn">browse to upload</strong></p>
+        </div>
+
+        <div class="file-pill" id="filePill">
+          <div class="file-pill-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f0e040" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+            </svg>
+          </div>
+          <div class="file-pill-info">
+            <div class="file-pill-name" id="pillName">—</div>
+            <div class="file-pill-size" id="pillSize">—</div>
+          </div>
+          <button class="file-pill-rm" id="fileRm">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="divider">or paste notes directly</div>
+
+        <textarea class="form-input" id="notesInput" placeholder="Paste lecture notes, textbook excerpts, or any study material here…" rows="5"></textarea>
+
+        <div style="margin-top:12px">
+          <label class="form-label">Session title (optional)</label>
+          <input class="form-input" id="sessionTitle" type="text" placeholder="e.g. Chapter 5 – Cell Biology" style="max-width:400px">
+        </div>
+      </div>
+
+      <!-- Generation options -->
+      <div class="grid-2" style="margin-bottom:20px">
+        <!-- Flashcards -->
+        <div class="card">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+            <div style="width:36px;height:36px;border-radius:8px;background:rgba(240,224,64,.1);border:1px solid rgba(240,224,64,.2);display:flex;align-items:center;justify-content:center">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f0e040" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="3"/></svg>
+            </div>
+            <div>
+              <div style="font-weight:700;font-size:.9rem">Flashcards</div>
+              <div style="font-size:.75rem;color:var(--muted)">Flip-card study set</div>
+            </div>
+            <label class="toggle-wrap" style="margin-left:auto">
+              <input type="checkbox" id="genFlashcards" checked style="width:auto">
+            </label>
+          </div>
+          <div class="count-row">
+            <span>Cards to generate:</span>
+            <input class="form-number" type="number" id="fcCount" value="8" min="3" max="20">
+          </div>
+        </div>
+
+        <!-- Quiz -->
+        <div class="card">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+            <div style="width:36px;height:36px;border-radius:8px;background:rgba(61,232,200,.1);border:1px solid rgba(61,232,200,.2);display:flex;align-items:center;justify-content:center">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3de8c8" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/></svg>
+            </div>
+            <div>
+              <div style="font-weight:700;font-size:.9rem">Quiz</div>
+              <div style="font-size:.75rem;color:var(--muted)">Multiple-choice test</div>
+            </div>
+            <label class="toggle-wrap" style="margin-left:auto">
+              <input type="checkbox" id="genQuiz" checked style="width:auto">
+            </label>
+          </div>
+          <div class="count-row">
+            <span>Questions to generate:</span>
+            <input class="form-number" type="number" id="qCount" value="6" min="3" max="15">
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary btn-lg" id="generateBtn" style="min-width:220px">
+        <span class="btn-label">✦ Generate Now</span>
+        <div class="spin-wrap"><div class="spinner"></div><span>Working…</span></div>
+      </button>
+
+      <div class="status-bar" id="genStatus">
+        <div class="status-dot"></div>
+        <span id="statusText">Processing…</span>
+        <div class="prog-wrap"><div class="prog-fill" id="progFill"></div></div>
+      </div>
+      <div class="error-bar" id="genError">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span id="errorText">Error</span>
+      </div>
+      <div class="success-bar" id="genSuccess">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <span id="successText">Done!</span>
+      </div>
+    </section>
+
+    <!-- ─────────────── FLASHCARDS ─────────────── -->
+    <section class="page" id="page-flashcards">
+      <div class="section-hdr">
+        <div>
+          <h1 class="page-title">Flashcards</h1>
+          <p class="page-sub" style="margin-bottom:0">All your saved flashcard sets.</p>
+        </div>
+        <button class="btn btn-primary" onclick="nav('generate')">+ New Set</button>
+      </div>
+
+      <div id="fc-sets-list"></div>
+    </section>
+
+    <!-- ─────────────── QUIZZES ─────────────── -->
+    <section class="page" id="page-quizzes">
+      <div class="section-hdr">
+        <div>
+          <h1 class="page-title">Quizzes</h1>
+          <p class="page-sub" style="margin-bottom:0">Browse and take your generated quizzes.</p>
+        </div>
+        <button class="btn btn-primary" onclick="nav('generate')">+ New Quiz</button>
+      </div>
+
+      <div id="quiz-list-container" class="quiz-list"></div>
+    </section>
+
+    <!-- ─────────────── HISTORY ─────────────── -->
+    <section class="page" id="page-history">
+      <h1 class="page-title">Quiz History</h1>
+      <p class="page-sub">All your quiz attempts and scores.</p>
+
+      <div class="card">
+        <table class="history-table" id="history-table">
+          <thead>
+            <tr>
+              <th>Quiz</th>
+              <th>Date</th>
+              <th>Score</th>
+              <th>Grade</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody id="history-tbody"></tbody>
+        </table>
+        <div class="empty-state" id="history-empty" style="display:none">
+          <div class="empty-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+          <h3>No quiz attempts yet</h3>
+          <p>Take a quiz to see your history here.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────────── QUIZ PLAYER ─────────────── -->
+    <section class="page" id="page-quiz-player">
+      <div id="quiz-player-inner"></div>
+    </section>
+
+    <!-- ─────────────── FLASHCARD VIEWER ─────────────── -->
+    <section class="page" id="page-fc-viewer">
+      <div class="section-hdr" id="fc-viewer-hdr">
+        <div>
+          <button class="btn btn-ghost" style="font-size:.8rem;padding:6px 12px;margin-bottom:10px" onclick="nav('flashcards')">← Back</button>
+          <h1 class="page-title" id="fc-viewer-title">Flashcard Set</h1>
+          <p class="page-sub" id="fc-viewer-meta" style="margin-bottom:0"></p>
+        </div>
+      </div>
+      <p style="color:var(--muted);font-size:0.84rem;margin-bottom:4px">Click any card to flip it and reveal the answer.</p>
+      <div class="fc-grid" id="fc-viewer-grid"></div>
+    </section>
+
+  </main><!-- /main -->
+</div><!-- /shell -->
+
+<!-- ══ MODAL: Quiz Results ══ -->
+<div class="modal-overlay" id="resultsModal">
+  <div class="modal" style="max-width:480px;text-align:center">
+    <div id="resultsModalContent"></div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
