@@ -22,7 +22,7 @@ if (currentUser) {
   document.getElementById('user-avatar').textContent = (currentUser.name || 'U')[0].toUpperCase();
 }
 
-/* DATABASE  (PostgreSQL via API) */
+/* DATABASE */
 const DB = {
   async getSets() {
     try {
