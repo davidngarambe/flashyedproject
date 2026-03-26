@@ -9,10 +9,7 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// ─── SUPABASE / DB CONNECTION ─────────────────────────────────────────────────
-// Set SUPABASE_DB_URL in your .env file.
-// Find it in: Supabase Dashboard → Project Settings → Database → Connection string → URI
-// It looks like: postgresql://postgres:[PASSWORD]@db.[PROJECT-REF].supabase.co:5432/postgres
+// SUPABASE / DB CONNECTION
 const connectionString = process.env.SUPABASE_DB_URL || process.env.DATABASE_URL;
 
 if (!connectionString) {
@@ -26,7 +23,7 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false },
 });
 
-// ─── MIDDLEWARE ───────────────────────────────────────────────────────────────
+// MIDDLEWARE
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname)));
@@ -36,9 +33,9 @@ app.get('/', (req, res) => {
   res.redirect('/index.html');
 });
 
-// ─── HELPERS ─────────────────────────────────────────────────────────────────
+// HELPERS
 
-// Convert snake_case DB rows to camelCase for the frontend
+// Convert snake_case DB rows to camel case for the frontend
 function toCamel(row) {
   if (!row) return row;
   const out = {};
@@ -61,9 +58,7 @@ function adminOnly(req, res, next) {
   next();
 }
 
-// ─── STARTUP: TEST CONNECTION + SEED ADMIN ───────────────────────────────────
-// NOTE: Tables are created by running schema.sql in the Supabase SQL Editor.
-// This function only verifies the connection and seeds the admin account.
+// TEST CONNECTION + SEED ADMIN
 async function initDB() {
   // Verify connection
   await pool.query('SELECT 1');
@@ -84,7 +79,7 @@ async function initDB() {
   console.log('Database ready.');
 }
 
-// ─── AUTH ROUTES ──────────────────────────────────────────────────────────────
+// AUTH ROUTES
 
 app.post('/api/auth/register', async (req, res) => {
   const { name, email, password } = req.body;
@@ -131,7 +126,7 @@ app.post('/api/auth/login', async (req, res) => {
   }
 });
 
-// ─── FLASHCARD ROUTES ─────────────────────────────────────────────────────────
+// FLASHCARD ROUTES
 
 app.get('/api/flashcards', async (req, res) => {
   const { userId } = req.query;
@@ -168,7 +163,7 @@ app.delete('/api/flashcards/:id', async (req, res) => {
   }
 });
 
-// ─── QUIZ ROUTES ──────────────────────────────────────────────────────────────
+// QUIZ ROUTES 
 
 app.get('/api/quizzes', async (req, res) => {
   const { userId } = req.query;
@@ -215,7 +210,7 @@ app.delete('/api/quizzes/:id', async (req, res) => {
   }
 });
 
-// ─── ATTEMPT ROUTES ───────────────────────────────────────────────────────────
+// ATTEMPT ROUTES
 
 app.get('/api/quizzes/:quizId/attempts', async (req, res) => {
   try {
@@ -242,7 +237,7 @@ app.post('/api/quizzes/:quizId/attempts', async (req, res) => {
   }
 });
 
-// ─── ADMIN ROUTES ─────────────────────────────────────────────────────────────
+// ADMIN ROUTES
 
 app.get('/api/admin/stats', adminOnly, async (req, res) => {
   try {
@@ -355,8 +350,7 @@ app.get('/api/admin/all-quizzes', adminOnly, async (req, res) => {
   }
 });
 
-// ─── AI GENERATE ROUTE ───────────────────────────────────────────────────────
-// Proxies requests to Anthropic so the API key stays server-side only
+// AI GENERATE ROUTE
 
 app.post('/api/generate', async (req, res) => {
   const { prompt, maxTokens = 2000 } = req.body;
@@ -403,7 +397,7 @@ app.post('/api/generate', async (req, res) => {
   }
 });
 
-// ─── START ────────────────────────────────────────────────────────────────────
+// START
 initDB()
   .then(() => {
     app.listen(PORT, () => console.log(`FlashyEd running → http://localhost:${PORT}`));

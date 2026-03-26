@@ -2,9 +2,7 @@
 // API key lives in .env on the server — never put it here
 const API = '/api';
 
-/* ═══════════════════════════════════════════════════════════════
-   AUTH GUARD
-═══════════════════════════════════════════════════════════════ */
+/* AUTH GUARD */
 let currentUser = null;
 try {
   const stored = localStorage.getItem('fe_user');
@@ -25,9 +23,7 @@ if (currentUser) {
   document.getElementById('user-avatar').textContent = (currentUser.name || 'U')[0].toUpperCase();
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   DATABASE  (PostgreSQL via API)
-═══════════════════════════════════════════════════════════════ */
+/* DATABASE  (PostgreSQL via API) */
 const DB = {
   async getSets() {
     try {
@@ -107,9 +103,7 @@ const DB = {
   }
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   NAV
-═══════════════════════════════════════════════════════════════ */
+/* NAV */
 function nav(pageId) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -131,9 +125,7 @@ document.querySelectorAll('.nav-item[data-page]').forEach(btn => {
   btn.addEventListener('click', () => nav(btn.dataset.page));
 });
 
-/* ═══════════════════════════════════════════════════════════════
-   PDF EXTRACTION
-═══════════════════════════════════════════════════════════════ */
+/* PDF EXTRACTION */
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
 let uploadedFile = null;
@@ -198,9 +190,7 @@ async function extractPdf(file, onProgress) {
   });
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   CLAUDE API  (proxied through server — key stays in .env)
-═══════════════════════════════════════════════════════════════ */
+/* CLAUDE API */
 async function claudeJSON(prompt) {
   const resp = await fetch(`${API}/generate`, {
     method: 'POST',
@@ -252,9 +242,7 @@ Study material:
 ${content.slice(0, 11000)}`;
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   GENERATE
-═══════════════════════════════════════════════════════════════ */
+/* GENERATE */
 document.getElementById('generateBtn').addEventListener('click', runGenerate);
 
 async function runGenerate() {
@@ -322,9 +310,7 @@ async function runGenerate() {
   }
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   DASHBOARD
-═══════════════════════════════════════════════════════════════ */
+/* DASHBOARD */
 async function renderDashboard() {
   const sets     = await DB.getSets();
   const attempts = await DB.getAttempts();
@@ -395,9 +381,7 @@ async function renderDashboard() {
   }
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   FLASHCARD SETS LIST
-═══════════════════════════════════════════════════════════════ */
+/* FLASHCARD SETS LIST */
 async function renderFlashcardSets() {
   const sets = await DB.getSets();
   const el = document.getElementById('fc-sets-list');
@@ -478,9 +462,7 @@ function diffLabel(cards) {
   return top ? top[0] : 'mixed';
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   QUIZ LIST
-═══════════════════════════════════════════════════════════════ */
+/* QUIZ LIST */
 async function renderQuizList() {
   const quizzes = await DB.getQuizzes();
   const el = document.getElementById('quiz-list-container');
@@ -519,9 +501,7 @@ async function deleteQuiz(id) {
   updateBadges();
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   QUIZ PLAYER
-═══════════════════════════════════════════════════════════════ */
+/* QUIZ PLAYER */
 let quizState = null;
 
 async function startQuiz(quizId) {
@@ -652,9 +632,7 @@ document.getElementById('resultsModal').addEventListener('click', e => {
   if (e.target === document.getElementById('resultsModal')) closeResults();
 });
 
-/* ═══════════════════════════════════════════════════════════════
-   HISTORY
-═══════════════════════════════════════════════════════════════ */
+/* HISTORY */
 async function renderHistory() {
   const attempts = await DB.getAttempts();
   const tbody = document.getElementById('history-tbody');
@@ -689,9 +667,7 @@ async function renderHistory() {
   }).join('');
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   BADGES + HELPERS
-═══════════════════════════════════════════════════════════════ */
+/* BADGES + HELPERS */
 async function updateBadges() {
   const [sets, quizzes, attempts] = await Promise.all([DB.getSets(), DB.getQuizzes(), DB.getAttempts()]);
   document.getElementById('nb-flashcards').textContent = sets.length;
@@ -747,8 +723,6 @@ function showGenSuccess(html) {
   document.getElementById('genSuccess').classList.add('show');
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   BOOT
-═══════════════════════════════════════════════════════════════ */
+/* BOOT */
 updateBadges();
 renderDashboard();

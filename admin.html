@@ -382,7 +382,7 @@
 <script>
 const API = '/api';
 
-/* ─── AUTH GUARD ─── */
+/* AUTH GUARD */
 let currentUser = null;
 try { currentUser = JSON.parse(localStorage.getItem('fe_user')); } catch {}
 if (!currentUser || currentUser.role !== 'admin') {
@@ -400,7 +400,7 @@ if (currentUser) {
   document.getElementById('user-avatar').textContent = (currentUser.name || 'A')[0].toUpperCase();
 }
 
-/* ─── SETTINGS STORAGE ─── */
+/* SETTINGS STORAGE */
 function saveSetting(key, value) {
   const settings = JSON.parse(localStorage.getItem('fe_admin_settings') || '{}');
   settings[key] = value;
@@ -414,7 +414,7 @@ function loadSettings() {
   if (settings.maxQuestions) document.getElementById('setting-max-q').value = settings.maxQuestions;
 }
 
-/* ─── TAB NAVIGATION ─── */
+/* TAB NAVIGATION */
 document.querySelectorAll('.nav-item[data-tab]').forEach(btn => {
   btn.addEventListener('click', () => switchTab(btn.dataset.tab));
 });
@@ -437,7 +437,7 @@ function showContentTab(name, btn) {
   document.getElementById('content-quizzes-content').style.display = name === 'quizzes-content' ? 'block' : 'none';
 }
 
-/* ─── ADMIN API HELPER ─── */
+/* ADMIN API HELPER */
 async function adminFetch(path) {
   const r = await fetch(API + path, {
     headers: { 'x-user-role': 'admin' }
@@ -454,7 +454,7 @@ async function adminAction(path, method, body) {
   return r.ok ? r.json() : null;
 }
 
-/* ─── OVERVIEW ─── */
+/* OVERVIEW */
 async function loadOverview() {
   const stats = await adminFetch('/admin/stats');
   if (!stats) return;
@@ -465,7 +465,7 @@ async function loadOverview() {
   document.getElementById('nb-users').textContent = stats.users;
 }
 
-/* ─── USERS ─── */
+/* USERS */
 let allUsers = [];
 
 async function loadUsers() {
@@ -535,7 +535,7 @@ async function deleteUser(id) {
   loadUsers();
 }
 
-/* ─── CONTENT ─── */
+/* CONTENT */
 async function loadContent() {
   const [fcs, qzs] = await Promise.all([
     adminFetch('/admin/all-flashcards'),
@@ -569,7 +569,7 @@ async function loadContent() {
   }
 }
 
-/* ─── HELPERS ─── */
+/* HELPERS */
 function esc(s) {
   return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
@@ -578,7 +578,7 @@ function fmtDate(ts) {
   return new Date(ts).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
 }
 
-/* ─── BOOT ─── */
+/* BOOT */
 loadOverview();
 </script>
 </body>

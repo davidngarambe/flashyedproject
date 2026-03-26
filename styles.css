@@ -1,6 +1,4 @@
-/* ═══════════════════════════════════════════
-   DESIGN TOKENS
-═══════════════════════════════════════════ */
+/* DESIGN TOKENS */
 :root {
   --bg:       #0b0b0e;
   --surf:     #111115;
@@ -23,9 +21,7 @@
   --r-xl:     20px;
 }
 
-/* ═══════════════════════════════════════════
-   RESET + BASE
-═══════════════════════════════════════════ */
+/* RESET + BASE */
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
 body {
@@ -54,9 +50,7 @@ a { color:inherit; text-decoration:none; }
 ::-webkit-scrollbar-track { background:var(--surf); }
 ::-webkit-scrollbar-thumb { background:var(--border2); border-radius:3px; }
 
-/* ═══════════════════════════════════════════
-   LAYOUT SHELL
-═══════════════════════════════════════════ */
+/* LAYOUT SHELL */
 .shell {
   display: grid;
   grid-template-columns: 220px 1fr;
@@ -64,7 +58,7 @@ a { color:inherit; text-decoration:none; }
   min-height: 100vh;
 }
 
-/* ── TOPBAR ── */
+/* TOPBAR */
 .topbar {
   grid-column: 1 / -1;
   display: flex;
@@ -217,9 +211,7 @@ a { color:inherit; text-decoration:none; }
   to   { opacity:1; transform:translateY(0); }
 }
 
-/* ═══════════════════════════════════════════
-   SHARED COMPONENTS
-═══════════════════════════════════════════ */
+/* SHARED COMPONENTS */
 .page-title {
   font-size: 1.6rem;
   font-weight: 700;
@@ -635,9 +627,7 @@ textarea.form-input { min-height:120px; resize:vertical; line-height:1.6; }
 .fc-meta  { display:flex; align-items:center; justify-content:space-between; margin-top:10px; }
 .fc-hint  { font-size:0.67rem; color:var(--muted); opacity:.6; }
 
-/* ═══════════════════════════════════════════
-   QUIZ PLAYER
-═══════════════════════════════════════════ */
+/* QUIZ PLAYER */
 .quiz-shell {
   max-width:680px; margin:0 auto;
 }
