@@ -1,5 +1,4 @@
-/* ─── CONFIG ─── */
-// API key lives in .env on the server — never put it here
+/* CONFIG */
 const API = '/api';
 
 /* AUTH GUARD */
