@@ -10,9 +10,12 @@
 In the VScode terminal inside the directory you want. Paste this line -> git clone https://github.com/davidngarambe/flashyed
 
 **Configure Environment Variables**
-Create a .env file and paste inside this code:
+Create a .env file and paste inside these lines of code:
+
 SUPABASE_DB_URL=postgresql://postgres.mjuskppzgumldunazixl:Calculus11%40%21%21%23@aws-1-eu-west-1.pooler.supabase.com:5432/postgres
+
 ANTHROPIC_KEY=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
+
 PORT=3001
 
 **Install & Run**
