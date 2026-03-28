@@ -13,7 +13,7 @@ Create a .env file and paste inside these lines of code:
 
 1. SUPABASE_DB_URL=postgresql://postgres.mjuskppzgumldunazixl:Calculus11%40%21%21%23@aws-1-eu-west-1.pooler.supabase.com:5432/postgres
 
-2. ANTHROPIC_KEY=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
+2. ANTHROPIC_KEY=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
 
 3. PORT=3001
 
